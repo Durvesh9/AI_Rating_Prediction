@@ -12,9 +12,9 @@ import os
 from dotenv import load_dotenv
 import google.generativeai as genai
 
-# ============================================================================
+
 # CONFIGURATION & SETUP
-# ============================================================================
+
 
 st.set_page_config(
     page_title="AI Feedback System",
@@ -29,9 +29,9 @@ genai.configure(api_key=API_KEY)
 # Data file path
 DATA_FILE = "submissions.json"
 
-# ============================================================================
+
 # UTILITY FUNCTIONS
-# ============================================================================
+
 
 def load_submissions():
     """Load all submissions from JSON file"""
@@ -111,9 +111,8 @@ Provide ONE specific recommended action (max 1 sentence):"""
     except Exception as e:
         return sentiment_map.get(rating, "Review and respond appropriately")
 
-# ============================================================================
+
 # PAGE 1: USER DASHBOARD (Public-Facing)
-# ============================================================================
 
 def user_dashboard():
     """User-facing dashboard for submitting reviews"""
@@ -146,7 +145,6 @@ def user_dashboard():
         st.markdown(f"<h2 style='text-align: center'>{star_display}</h2>", 
                    unsafe_allow_html=True)
     
-    # Submit button
     col1, col2, col3 = st.columns([1, 1, 1])
     
     with col2:
@@ -195,9 +193,9 @@ def user_dashboard():
     else:
         st.info("No feedback yet. Be the first to review!")
 
-# ============================================================================
+
 # PAGE 2: ADMIN DASHBOARD (Internal-Facing)
-# ============================================================================
+
 
 def admin_dashboard():
     """Admin-facing dashboard for reviewing submissions and taking action"""
@@ -303,9 +301,9 @@ def admin_dashboard():
                 mime="text/csv"
             )
 
-# ============================================================================
+
 # MAIN APP ROUTER
-# ============================================================================
+
 
 def main():
     """Main app with page routing"""

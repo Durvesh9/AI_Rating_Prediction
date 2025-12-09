@@ -12,25 +12,21 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import os
 
-# ============================================================================
+
 # CONFIG: API KEY + DATA PATH
-# ============================================================================
+
 
 load_dotenv()
-# 1) HARD-CODE YOUR GEMINI API KEY HERE
+
 API_KEY =  os.getenv("GEMINI_API_KEY")
 
 genai.configure(api_key=API_KEY)
 
-# 2) PATH TO YOUR CSV (RELATIVE TO WHERE YOU RUN THE SCRIPT)
-# Example: if file is at  E:\coding practice\assignment\Fynd Assignment\Rating_Prediction\yelp.csv
-# and you run:  cd ...\Rating_Prediction  then:
-DATA_PATH = "Rating_Prediction\data\yelp.csv"   # <-- CHANGE IF NEEDED (e.g. "data/yelp.csv")
+
+DATA_PATH = "Rating_Prediction\data\yelp.csv"   
 
 
-# ============================================================================
 # PART 1: LOAD & PREPARE DATA
-# ============================================================================
 
 def load_and_sample_data(filepath: str, sample_size: int = 200) -> pd.DataFrame:
     """
@@ -39,7 +35,6 @@ def load_and_sample_data(filepath: str, sample_size: int = 200) -> pd.DataFrame:
     """
     df = pd.read_csv(filepath)
 
-    # Rename if needed
     if "rating" in df.columns:
         df = df.rename(columns={"rating": "stars"})
 
@@ -51,9 +46,7 @@ def load_and_sample_data(filepath: str, sample_size: int = 200) -> pd.DataFrame:
     return df
 
 
-# ============================================================================
 # PART 2: DEFINE 3 PROMPTING APPROACHES
-# ============================================================================
 
 class RatingPredictor:
     """Unified interface for all 3 prompting approaches"""
@@ -217,9 +210,8 @@ JSON OUTPUT:
         return results
 
 
-# ============================================================================
+
 # PART 3: EVALUATION METRICS
-# ============================================================================
 
 def is_valid_json(prediction: Dict) -> bool:
     """Check if prediction has required fields with valid types"""
@@ -263,9 +255,9 @@ def evaluate_approach(results_df: pd.DataFrame, approach: str) -> Dict:
     }
 
 
-# ============================================================================
+
 # PART 4: MAIN EXECUTION
-# ============================================================================
+
 
 def main():
     """Main execution pipeline"""
@@ -290,7 +282,6 @@ def main():
     total = len(df)
 
     for idx, row in df.iterrows():
-        # Compact progress line (no full review printed)
         print(f"Review {idx + 1}/{total}", end="\r", flush=True)
 
         predictions = predictor.predict_with_all_approaches(row["text"])
@@ -322,7 +313,6 @@ def main():
         print(f"  JSON Validity Rate: {metrics['json_validity_rate']:.1f}%")
         print(f"  Accuracy: {metrics['accuracy']:.1f}%")
 
-    # Create comparison table
     comparison_df = pd.DataFrame(evaluation_results)
 
     print("\n[5] RESULTS SUMMARY")
